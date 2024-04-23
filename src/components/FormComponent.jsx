@@ -1,17 +1,16 @@
-import React, { useState } from "react";
+import  { useState } from "react";
+import axios from "axios"; // Importiere axios für HTTP-Anfragen
 
 const FormComponent = () => {
-  // Initial form data
   const initialFormData = {
     firstName: "",
     lastName: "",
     favoriteLanguage: "",
     isStudent: false,
   };
-  // State to store the form data
+  
   const [formData, setFormData] = useState(initialFormData);
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -20,13 +19,19 @@ const FormComponent = () => {
     });
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
-    console.log("Form Data:", formData);
-
-    setFormData(initialFormData); // Reset form data
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    try {
+      const response = await axios.post("http://localhost:8080/submit", formData);
+      console.log("Server Response:", response.data);
+    } catch (error) {
+      console.error("Fehler beim Senden des Formulars:", error);
+    }
+  
+    setFormData(initialFormData);
   };
+  
 
   return (
     <div className="container w-[50%] border-2 rounded-2xl shadow-lg shadow-cyan-400 ">
